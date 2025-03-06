@@ -1,0 +1,62 @@
+# Training Language Model in Google Colab
+
+## 1. Check GPU
+```python
+# Cell 1
+!nvidia-smi
+```
+
+## 2. Install Libraries
+```python
+# Cell 2
+!pip install transformers datasets torch accelerate tensorboard safetensors bitsandbytes peft
+```
+
+## 3. Upload Training Data File
+```python
+# Cell 3
+from google.colab import files
+uploaded = files.upload()  # Upload your training_data.txt here
+```
+
+## 4. Create Training Script
+```python
+# Cell 4 - paste the entire code from train_model_colab.py
+%%writefile train_model_colab.py
+# Paste the contents of train_model_colab.py here
+```
+
+## 5. Start Training
+```python
+# Cell 5
+!python train_model_colab.py --data_path "training_data.txt" --epochs 3 --batch_size 1
+```
+
+## 6. Monitor in TensorBoard
+```python
+# Cell 6
+%load_ext tensorboard
+%tensorboard --logdir results
+```
+
+## 7. Download Model
+```python
+# Cell 7
+!zip -r local_language_model.zip local_language_model/
+files.download('local_language_model.zip')
+```
+
+IMPORTANT STEPS:
+1. Go to https://colab.research.google.com
+2. Create a new notebook
+3. In top menu: Runtime -> Change runtime type -> select GPU
+4. Copy the above cells one by one
+5. Execute cells in order (Shift+Enter)
+6. When the upload window appears, upload training_data.txt
+
+NOTES:
+- The model uses 8-bit quantization with LoRA for efficient training
+- Make sure all libraries are installed correctly (especially bitsandbytes and peft)
+- If you encounter CUDA memory errors, reduce batch_size to 1
+- Training progress will be visible in TensorBoard
+- The final model will be saved and compressed into a ZIP file 
